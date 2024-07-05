@@ -1,0 +1,33 @@
+ls                       : list, of current folder
+mkdir folder_name        : make directory = create new folder
+cd folder_name           : change directory to folder_name
+cd ..                    : return previous folder
+cd ~                     : return main home folder
+gedit text_file_name.txt : create new txt file
+gedit sh_file_name.sh    : create new sh command file
+source sh_file_name.sj   : run code in sh file
+echo display_something   : in sh file, display display_something in command window
+ls -a                    : display all folders, including hidden folder
+gedit ~/.bashrc          : edit bashrc file in the main folder
+ls -l ~/.bashrc          : check current authority
+sudo apt install
+pwd                      : check current directory
+mv file_name /home/folder: cut, ctrl+x, to folder
+cp file_name terget_folder/new_file_name: copy to target_folder and rename to new_file_name
+rm file_name             : delete file_name
+rm -r folder_name        : delete folder_name
+sudo --help, rm --help   : help
+touch new_file           : create new_file but not opening it
+
+C++
+g++ C++_for.cpp -o C++_for2 : compile C++ code, and save as compiled file with new name C++_for2 
+./C++_for2                  : run C++_for2, the compiled code
+
+python
+python3 python_for.py       :run python_for.py python code. (python3 is installed)
+sudo apt install ros-noetic-PACKAGE: install a specific package directly
+
+Sea turtle simulator
+rosrun turtlesim turtlesim_node
+rosrun turtlesim turtle_teleop_key :need to click this terminal to move turtle
+

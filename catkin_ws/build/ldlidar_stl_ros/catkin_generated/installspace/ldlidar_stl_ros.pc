@@ -1,0 +1,8 @@
+prefix=/home/ubuntu/catkin_ws/install
+
+Name: ldlidar_stl_ros
+Description: Description of ldlidar_stl_ros
+Version: 3.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

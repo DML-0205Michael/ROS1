@@ -1,0 +1,4 @@
+float32 M1_speed
+float32 M2_speed
+int32 M1_encoder_speed
+int32 M2_encoder_speed

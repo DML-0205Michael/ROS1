@@ -1,0 +1,16 @@
+<launch>
+
+  <!-- 载入 机器人 和 长走廊 的仿真场景 -->
+  <include file="$(find wpr_simulation)/launch/wpb_stage_corridor.launch"/>
+
+  <!-- Gmapping -->
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping"/>
+
+  <!-- Rviz -->
+  <arg name="rvizconfig" default="$(find wpr_simulation)/rviz/corridor.rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+  <!-- 运动控制 -->
+  <node pkg="rqt_robot_steering" type="rqt_robot_steering" name="rqt_robot_steering"/>
+
+</launch>

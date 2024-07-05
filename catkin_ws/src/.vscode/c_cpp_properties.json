@@ -1,0 +1,27 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/ubuntu/catkin_ws/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/ubuntu/catkin_ws/src/learning_parameter/include/**",
+        "/home/ubuntu/catkin_ws/src/learning_service/include/**",
+        "/home/ubuntu/catkin_ws/src/learning_tf/include/**",
+        "/home/ubuntu/catkin_ws/src/learning_topic/include/**",
+        "/home/ubuntu/catkin_ws/src/test_pkg/include/**",
+        "/home/ubuntu/catkin_ws/src/wpr_simulation/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-arm64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

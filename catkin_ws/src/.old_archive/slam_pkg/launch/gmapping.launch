@@ -1,0 +1,14 @@
+<launch>
+
+    <include file="$(find wpr_simulation)/launch/wpb_stage_robocup.launch"/>
+
+    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
+        <param name="maxUrange" value="3"/>
+
+    </node>
+
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find slam_pkg)/rviz/slam.rviz"/>
+
+    <node pkg="wpr_simulation" type="keyboard_vel_ctrl" name="keyboard_vel_ctrl"/>
+
+</launch>

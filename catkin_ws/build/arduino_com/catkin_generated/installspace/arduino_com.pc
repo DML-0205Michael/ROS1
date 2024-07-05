@@ -1,0 +1,8 @@
+prefix=/home/ubuntu/catkin_ws/install
+
+Name: arduino_com
+Description: Description of arduino_com
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

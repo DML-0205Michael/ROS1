@@ -1,0 +1,7 @@
+<launch>
+
+    <node pkg="motor_pkg" type="motor_node" name="motor_node" output="screen" launch-prefix="gnome-terminal -e"/>
+
+    <node pkg="sensor_pkg" type="ultra_sonic_sensor_node" name="ultra_sonic_sensor_node" output="screen"/>
+
+</launch>

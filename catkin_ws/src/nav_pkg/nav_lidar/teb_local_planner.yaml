@@ -1,0 +1,74 @@
+TebLocalPlannerROS:
+  odom_topic: odom
+
+
+  teb_autosize: true
+  dt_ref: 0.5
+  dt_hysteresis: 0.1
+  global_plan_overwrite_orientation: true
+  max_global_plan_lookahead_dist: 2.0
+  feasibility_check_no_poses: 2
+
+  # motion
+  max_vel_x: 1.5
+  max_vel_x_backwards: 0.5
+  max_vel_theta: 1.0
+  acc_lim_x: 0.5
+  acc_lim_theta: 1.0
+
+
+  min_turning_radius: 0.5
+  wheelbase: 0.31
+  cmd_angle_instead_rotvel: false
+
+
+  # car frame
+  footprint_model:
+    type: "circular"
+    # for type=circular:
+    radius: 0.15
+    # for type=line:
+    line_start: [0.0,0.0]
+    line_end: [0.0,0.0]
+    # for type=two_circles
+    front_offset: 0.35
+    front_radius: 0.35
+    rear_offset: 0.35
+    rear_radius: 0.35
+    # for type=polygon
+    vertices: [[0.35, 0.0],[-0.2, -0.25],[0.2,-0.25]]
+
+  # tolerance
+  xy_goal_tolerance: 0.2
+  yaw_goal_tolerance: 0.1
+
+  # obstacle
+  min_obstacle_dist: 0.05
+  inflation_dist: 0.15
+  include_costmap_obstacles: true
+  costmap_obstacles_behind_robot_dist: 0.15
+  obstacle_poses_affected: 25
+  costmap_converter_plugin: ""
+
+  # path
+  no_inner_iterations: 3
+  no_outer_iterations: 3
+  penalty_epsilon: 0.1
+  weight_max_vel_x: 2
+  weight_max_vel_theta: 1
+  weight_acc_lim_x: 1
+  weight_acc_lim_thet: 1
+  weight_kinematics_nh: 1000
+  weight_kinematics_forward_drive: 1
+  weight_optimaltime: 1
+  weight_obstacle: 50
+
+  # multi path
+  enable_homotopy_class_planning: true
+  enable_multithreading: True 
+  max_number_classes: 2
+  selection_cost_hysteresis: 1.0
+  selection_obst_cost_scale: 1.0
+  selection_alternative_time_cost: False 
+  roadmap_graph_no_samples: 15
+  roadmap_graph_area_width: 5

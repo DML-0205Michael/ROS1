@@ -1,0 +1,400 @@
+======================08 ROS TOOL======================
+Sea turtle simulator
+rosrun turtlesim turtlesim_node
+rosrun turtlesim turtle_teleop_key :need to click this terminal to move turtle
+
+rqt_graph            :overview of the system
+rosnode                      :show node info
+rosnode list                 :list all nodes
+rosnode info /turtlesim      :check node info
+
+rostopic list                :show topic list
+rostopic pub -r 10 /turtle1/cmd_vel...(double Tab) :publish a topic at 10 Hz
+
+rosmsg show geometry_msgs/Twist : show data structure
+
+rosservice list
+rosservice call /spawn
+
+rosbag record -a -O cmd_record   :-a=save all data;-O=save as zip, named cmd_record
+rosbag play cmd_record.bag       :play the record
+
+======================09 WORKSPACE and PACKAGE======================
+9.1 CREATE WORKSPACE
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src
+catkin_init_workspace
+
+9.2 COMPILE WORKSPACE
+cd ~/catkin_ws/      :complie need to go back to root dir
+catkin_make
+catkin_make install
+
+9.3 SET ENVIRONMENT (IMPORTANT)
+source devel/setup.bash
+
+9.4 CHECK ENVIRONMENT VARIABLE
+echo $ROS_PACKAGE_PATH
+
+9.5 CREATE PACKAGE
+cd ~/catkin_ws/src
+catkin_create_pkg <package_name> [depend1][depend2][depend3]
+catkin_create_pkg test_pkg std_msgs rospy roscpp
+
+9.6 COMPILE PACKAGE
+cd ~/catkin_ws/ 
+catkin_make
+source ~/catkin_ws/devel/setup.bash
+
+======================10 Publisher======================
+/home/ubuntu/catkin_ws/src/learning_topic/src
+
+10.1 create a learning package
+catkin_create_pkg learning_topic roscpp rospy std_msgs geometry_msgs turtlesim
+
+10.2 after publisher code is done
+cd ~/catkin_ws/ 
+catkin_make
+source devel/setup.bash   :home folder, ctrl+h, /bashrc, add "source /home/ubuntu/catkin_ws/devel/setup.bash"
+roscore
+rosrun turtlesim turtlesim_node
+rosrun learning_topic velocity_publisher
+
+10.3 run with python
+rosrun learning_topic velocity_publisher.py
+
+======================11 Subscriber======================
+/home/ubuntu/catkin_ws/src/learning_topic/src
+
+#include <ros/ros.h>
+#include <turtlesim/Pose.h>
+
+void poseCallback(const turtlesim::Pose::ConstPtr& msg){
+// print message received
+	ROS_INFO("Turtle pose: x:%0.6f, y:%0.6f",msg->x, msg->y);
+}
+
+int main (int argc, char **argv)
+{
+// node init. Node name: velocity_publisher
+	ros::init(argc, argv, "pose_subscriber");
+// create node handle
+	ros::NodeHandle n;
+// Create subscriber.// Subscribed Topic name: /turtle1/pose // register call back function
+	ros::Subscriber pose_sub = n.subscribe("/turtle1/pose",10,poseCallback);
+// loop, waiting for call back function. If message coming in, call poseCallback
+	ros::spin();
+	return 0;
+}
+
+======================12 Define and Use topic message======================
+/home/ubuntu/catkin_ws/src/learning_topic/msg
+1. create a new folder called msg
+2. define the variables
+3. add package depend in package.xml (see line 68, 69)
+	<build_depend>message_generation</build_depend>
+	<exec_depend>message_runtime</exec_depend>
+3.1 UDF_msg_pkg
+	<build_depend>UDF_msg_pkg</build_depend>
+	<exec_depend>UDF_msg_pkg</exec_depend>
+4. add compile option in CMakeLists.ext
+	4.1 add "message_generation" in find_package(catkin REQUIRED COMPONENTS...
+		4.1.1 add user_defined_msg_pkg if necessary
+	4.2 add "add_message_files(FILES Person.msg)"
+		"generate_messages(DEPENDENCIES std_msgs)" under "## Declare ROS messages, services and actions ##"
+	4.3 add "CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs turtlesim message_runtime" under
+		catkin_package(.... in "## catkin specific configuration ##"
+	4.4 add "add_dependencies(UDF_msg_pkg ${PROJECT_NAME}_generate_messages_cpp)"
+
+
+roscore
+rosrun turtlesim turtlesim_node
+rosrun learning_topic person_subscriber
+rosrun learning_topic person_publisher
+https://www.bilibili.com/video/BV1ZU4y1z7kN/?spm_id_from=333.788
+https://www.bilibili.com/video/BV1zU4y1z7ZD/?spm_id_from=333.788&vd_source=480f94c41b9c85e4ee6ec94fb420145b
+
+======================13 Client======================
+13.1 Create function package
+cd ~/catkin_ws/src/
+catkin_create_pkg learning_service roscpp rospy std_msgs geometry_msgs turtlesim
+
+/home/ubuntu/catkin_ws/src/learning_service/src
+
+13.2 run it
+cd ~/catkin_ws
+catkin_make
+roscore
+rosrun turtlesim turtlesim_node
+rosrun learning_service turtle_spawn
+rosrun <function package> <node>
+
+======================14 Server======================
+14.1 rossrv show std_srvs/Trigger  : check def in command window. above---: request. below---:response
+---
+bool success
+string message
+
+14.2 compile and run
+cd ~/catkin_ws
+catkin_make
+source devel/setup.bash (see lesson 10)
+roscore
+rosrun turtlesim_turtlesim_node
+rosrun <function package> <node>
+rosrun learning_service turtle_command_server
+rosservice call /turtle_command "{}"
+
+======================15 Serivce data define======================
+15.1 Define srv file
+above---: request. below---:response
+	15.1.1. add package depend in package.xml
+		<build_depend>message_generation</build_depend>
+		<exec_depend>message_runtime</exec_depend>
+	15.1.2. add compile option in CMakeLists.txt
+		- find_pakcage(... message_generation)
+		- (add above "## Declare ROS dynamic reconfigure parameters ##")
+		  add_service_files(FIles Person.srv)
+		  generate_messages(DEPENDENCIES std_msgs)
+		- (uncomment, add to the end. catkin_package(... message_runtime))
+		  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs turtlesim message_runtime 
+		
+15.2 Compile
+add_executable(person_server src/person_server.cpp)
+target_link_libraries(person_server ${catkin_LIBRARIES})
+add_dependencies(person_server ${PROJECT_NAME}_gencpp)
+
+add_executable(person_client src/person_client.cpp)
+target_link_libraries(person_client ${catkin_LIBRARIES})
+add_dependencies(person_client ${PROJECT_NAME}_gencpp)
+
+
+======================16 Parameters======================
+16.1 create package
+catkin_create_pkg learning_parameter roscpp rospy std_srvs
+
+16.2 rosparam
+rosparam list                        :list parameters
+rosparam get param_key               :show specific parameter value
+rosparam set param_key param_value   :set specific parameter value
+rosparam load file_name              :get parameters from file
+rosparam delete param_key            :delete parameter
+
+rosservice call /clear "{}"          :enable the settings
+
+rosparam dump param.yaml             :save the settings to yaml file
+
+======================17 Coordinates Transformation (TF)======================
+17.1 TF
+sudo apt-get install ros-noetic-turtle-tf
+roslaunch turtle_tf turtle_tf_demo.launch
+rosrun turtlesim turtle_teleop_key
+rosrun tf view_frames
+
+17.2 view_frame report error
+	17.2.1. go to "sudo gedit /opt/ros/noetic/lib/tf/view_frames"
+	17.2.2. add vstr=str(vstr) at line 88
+
+17.3 show how to transform
+rosrun tf tf_echo turtle1 turtle2
+
+17.4 Vision tool
+rosrun rviz rviz -d 'rospack find turtle_ft' /rviz/turtle_rviz.rviz
+	17.4.1. global options->Fixed Frame -> change to World
+	17.4.2. left corner Add->TF->OK
+
+
+======================18 TF Broadcast and Listen======================
+18.1 create pkg
+cd ~/catkin_ws/src
+catkin_create_pkg learning_tf roscpp rospy tf turtlesim
+
+18.2 
+cd ~/catkin_ws
+catkin_make
+roscore
+rosrun turtlesim turtlesim_node
+rosrun learning_tf turtle_tf_broadcaster __name:=turtle1_tf_broadcaster /turtle1
+rosrun learning_tf turtle_tf_broadcaster __name:=turtle2_tf_broadcaster /turtle2
+rosrun learning_tf turtle_tf_listener 
+rosrun turtlesim turtle_teleop_key
+
+======================19 Launch File======================
+19.1 launch
+<launch>                              :tag, launch start
+</launch>                             :tag, launch end
+
+19.2 node
+<node pkg="package_name" name="node_name" type="executable_name" />  :start a node
+
+19.3 param
+<param name="output_frame" value="odom" />  :set param in ROS. name: param name; value: param value
+<rosparam file="params.yaml" command="load" ns="params" />  :load multiple param in param file
+
+19.4 arg (local variable, only in launch file)
+<arg name="arg_name" default="arg_value" />
+<param name="foo" value="$(arg arg_name)" />
+<node name="node" pkg="package" type="type" args="$(arg arg_name)" />
+
+19.5 remap
+<remap from="/turtlebot/cmd_vel" to="/cmd_vel" />   :from original name; to: rename
+
+19.6 include
+<include file="$(dirname)/other.launch" /> 
+
+19.7 run
+catkin_create_pkg learning_launch
+roslaunch learning_launch simple.launch 
+
+if inside of <node> </node>, params will have the prefix of the node name.
+
+rosparam get /turtlesim_node/A
+rosparam get /turtlesim_node/group/C
+
+======================20 Visualization Tool======================
+rqt_graph                      :block diagram overview of the system
+rqt_console                    :log/message output
+rqt_plot                       :plot
+rqt_image_view                 :show camera view
+rqt                            :full set of rqt tool. Plugins->choose one
+
+roscore
+rosrun rviz rviz               :start rviz
+roslaunch wpr_simulation wpb_rviz.launch
+
+roslaunch gazebo_ros <world.launch> :start gazebo
+
+======================21 resources======================
+ROS: www.ros.org
+ROS Wiki: wki.ros.org
+ROS Con: roscon.ros.org
+ROS Robots: robots.ros.org
+
+www.guyuehome.come
+www.guyuehome.com/Bubble
+class.guyuehome.com
+
+
+cd ~/catkin_ws/src
+git clone <website>
+
+code               :open VSCode
+code <file_name>   :open in vscode
+ctrl+shift+B       :VSCode compile (already set at default in tasks.json)
+
+ctrl+shift+T       :start Terminator
+ctrl+shift+E       :split left and right
+ctrl+shift+O       :split up and down
+alt+<arrow>        :change select terminal window
+ctrl+shift+W       :close terminal
+
+ibus-setup         :keyboard short cut settings
+
+roscd roscpp       :change directory to depends
+catkin_create_pkg <pkg_name> rospy roscpp std_msgs
+
+rostopic echo <topic> :show message in topic
+echo -e "<Unicode"   
+rostopic hz <topic>   :check publish freq
+
+rostopic echo /scan --noarr
+
+======================35, 36 Create and Use UDF_message_pkg======================
+1. catkin_create_pkg msg_pkg roscpp rospy std_msgs message_runtime message_generation
+2. new folder, new file.msg, define variable. Then config CMake file of the msg_pkg
+	2.0 check dependencies in find_package
+	2.1 uncomment add_message_files(FILES message.h)
+	2.2 uncomment generate_messages(DEPENDENCIES  std_msgs  # Or other packages containing msgs)
+	2.3 uncomment catkin_package(CATKIN_DEPENDS message_generation message_runtime roscpp rospy std_msgs)
+	2.4 check package.xml, make sure has 
+		<build_depend>message_generation</build_depend>
+		<build_depend>message_runtime</build_depend>
+		<exec_depend>message_runtime</exec_depend>
+		<exec_depend>message_generation</exec_depend>
+3. in needed node (NODE), #include <UDF_msg_pkg/message.h>
+4. ros::Publisher pub = n.advertise<msg_pkg::carry>("/ultra_sonic_sensor",10);
+5.1 for publisher
+#include <msg_pkg/carry.h>
+   msg_pkg::carry msg;
+   msg.grade="NB";
+   msg.star=101;
+   msg.data="gie gie";
+5.2 for subscriber
+#include <msg_pkg/carry.h>
+void motorCallback(msg_pkg::carry msg){
+    ROS_WARN(msg.grade.c_str());
+    ROS_WARN("%d star",msg.star);
+    ROS_INFO(msg.data.c_str());
+}
+6. CMakeLIst.txt of the NODE, add UDF_msg_pkg in find_package(catkin REQUIRED....)
+7. CMakeLIst.txt of the NODE, add add_dependencies(the_NODE UDF_msg_pkg_name_generate_messages_cpp)
+8. package.xml of the NODE, add <build_depend>UDF_msg_pkg</build_depend>
+9. package.xml of the NODE, add <exec_depend>UDF_msg_pkg</exec_depend>
+
+======================42 SLAM Hector_Mapping======================
+roslaunch wpr_simulation wpb_stage_slam.launch
+roslaunch wpr_simulation wpb_stage_slam.launch
+roslaunch wpr_simulation wpb_stage_slam.launch
+
+42.1 Rvis setup
+	42.1.1 Global options->Fixed Frame->map
+	42.1.2 add RobotModel
+	42.1.3 add laser scan->subscribe /scan
+	42.1.4 add map -> subscribe /map
+	
+42.2 launch with launch
+catkin_create_pkg slam_pkg roscpp rospy std_msgs
+roslaunch slam_pkg hector.launch
+
+rosrun rviz rviz -d /home/ubuntu/catkin_ws/src/slam_pkg/rviz/slam.rviz
+
+
+======================1001 Arduino and ROS======================
+Arduino publisher see Example see arduino example HelloWorld
+Arduino subscriber see Example see arduino example Blink
+
+if compilation error: No <CSTRING>, need to edit lib (see ans by Saad_Ahmed)
+https://answers.ros.org/question/361930/rosserial-arduino-compilation-error-no-cstring/
+"Just edit the msg.h file located Arduino/libraries/Rosserial_Arduino_Library/src/ros in line 40 write #include <string.h> and in line 68 and 182 remove std:: before memcpy"
+
+1. roscore
+2.1 rosrun rosserial_python serial_node.py /dev/ttyACM0 :for MEGA. port name can be found in arduino IDE
+2.2 rosrun rosserial_python serial_node.py _port:=/dev/ttyUSB0 _baud:=460800 :for esp32
+3. rostopic echo <topic_name> :show pub from Ard
+4. rostopic echo /ard_pub
+5. rosrun arduino_com arduino_com_test_node
+
+***************************spinONce(); must be in the loop() function******************************
+******************************if connect type-C first then put esp32 onto the board, MUST RESTART ESP32 TO INIT MPU6050******************************
+
+rostopic pub toggle_led std_msgs/Empty --once   :toggle LED on Ard
+
+rosrun rosserial_arduino make_libraries.py /home/ubuntu/Arduino1.8.19/libraries msg_pkg
+
+======================1002 LD19 LiDAR======================
+https://github.com/YahboomTechnology/DTOF-mini-LiDar
+https://github.com/YahboomTechnology/DTOF-mini-LiDar/tree/main/LD06_LiDar_ROS2
+https://github.com/ldrobotSensorTeam/ldlidar_stl_ros
+
+dmesg | grep tty  :check usb port tty name
+
+1. roslaunch ldlidar_stl_ros ld19.launch
+2. roslaunch ldlidar_stl_ros viewer_ld19_noetic.launch
+
+======================1003 SLAM======================
+***************************spinONce(); must be in the loop() function******************************
+******************************if connect type-C first then put esp32 onto the board, MUST RESTART ESP32 TO INIT MPU6050******************************
+
+1. roscore
+2. rosrun rosserial_python serial_node.py _port:=/dev/ttyUSB0 _baud:=460800 :for esp32
+
+rostopic echo /tf                  :show tf coords
+rosrun rqt_tf_tree rqt_tf_tree     :show tf tree
+rostopic echo /scan --noarr
+
+**************roslaunch slam_pkg first_gmapping.launch**************
+
+rosrun map_server map_saver map_name  :save map
+rosrun map_server map_server map_name :load map
+
+rosrun rqt_robot_steering rqt_robot_steering    :/cmd_vel manual input
