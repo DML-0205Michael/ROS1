@@ -34,9 +34,22 @@
 
     <!--- Run AMCL -->
     <node pkg="amcl" type="amcl" name="amcl">
-        <param name="update_min_a" value="0.05" /> 
-        <param name="update_min_d" value="0.05" />
+        <!-- <param name="update_min_a" value="0.01" /> 
+        <param name="update_min_d" value="0.01" />
         <param name="min_particles" value="200" />
+        <param name="recovery_alpha_slow" value="0.001" />
+        <param name="recovery_alpha_fast" value="0.1" />
+        <param name="laser_min_range" value="0.1" />
+        <param name="laser_max_range" value="9" />
+        <param name="laser_max_beams" value="100" />
+        <param name="odom_alpha1" value="0.005" />
+        <param name="odom_alpha2" value="0.005" />
+        <param name="odom_alpha3" value="0.005" />
+        <param name="odom_alpha4" value="0.005" />
+        <param name="laser_z_hit" value="0.9" />
+        <param name="laser_sigma_hit" value="0.05" />
+        <param name="laser_z_rand" value="0.5" />
+        <param name="laser_likelihood_max_dist" value="4.0" /> -->
         <!-- <param name="update_min_d" value="0.1" /> -->
     </node>
 

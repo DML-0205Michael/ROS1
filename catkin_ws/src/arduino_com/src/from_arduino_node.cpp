@@ -9,6 +9,9 @@ double vth = 0.0;
 void ardCallback(const msg_pkg::from_arduino_msg& msg){
   enc1=msg.encoder1; // right speed, count per 10ms (Left if facing bot)
   enc2=msg.encoder2; // speed, count per 10ms
+  // if (enc1==0 && enc2 ==0){
+  //   vth=0;
+  // } else 
   // vth=(msg.gz+15)/131/180*M_PI; // angular speed, rad/s
   // ROS_INFO("Enc1: %d, Enc2: %d, gz: %.5f",enc1,enc2,vth);
 }
@@ -51,7 +54,7 @@ int main(int argc, char** argv){
     double R_speed=enc1*meter_per_count_R; // m/s=meters per 10ms
     double L_speed=enc2*meter_per_count_L;
     vx=(L_speed+R_speed)/2;
-    double vth=(R_speed-L_speed)/0.177;
+    double vth=(R_speed-L_speed)/0.157;
     // vx=(enc1+enc2)*deg_per_count/360*wheel_diameter*M_PI/0.01;
 
     // ROS_INFO("L_sp: %.3f, R_sp: %.3f, vx: %.3f",L_speed, R_speed, vx);
