@@ -394,7 +394,7 @@ rostopic echo /scan --noarr
 
 **************roslaunch slam_pkg first_gmapping.launch**************
 
-rosrun map_server map_saver map_name  :save map
+rosrun map_server map_saver -f map_name  :save map
 rosrun map_server map_server map_name :load map
 
 rosrun rqt_robot_steering rqt_robot_steering    :/cmd_vel manual input

@@ -5,6 +5,6 @@ local_costmap:
   rolling_window: true # local costmap follow robot?
   width: 9
   height: 9
-  update_frequency: 10.0
-  publish_frequency: 10
-  transform_tolerance: 1.0
+  update_frequency: 20.0
+  publish_frequency: 20
+  transform_tolerance: 2.0

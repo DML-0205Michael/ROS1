@@ -51,11 +51,12 @@ int main(int argc, char** argv){
     //compute odometry in a typical way given the velocities of the robot
     // double R_speed=enc1*deg_per_count/360*wheel_diameter*M_PI; // m/s=meters per 10ms
     // double L_speed=enc2*deg_per_count/360*wheel_diameter*M_PI; // m/s=meters per 10ms
-    double R_speed=enc1*meter_per_count_R; // m/s=meters per 10ms
+    double R_speed=enc1*meter_per_count_R; // meters per 10ms
     double L_speed=enc2*meter_per_count_L;
-    vx=(L_speed+R_speed)/2;
-    double vth=(R_speed-L_speed)/0.157;
+    vx=(L_speed+R_speed)/2; // meters per loop (10ms)
+    double vth=(R_speed-L_speed)/0.157; // rad per loop
     // vx=(enc1+enc2)*deg_per_count/360*wheel_diameter*M_PI/0.01;
+    ROS_INFO("vx: %.3f, vth: %.3f",vx,vth);
 
     // ROS_INFO("L_sp: %.3f, R_sp: %.3f, vx: %.3f",L_speed, R_speed, vx);
     double dt = (current_time - last_time).toSec();
@@ -64,7 +65,7 @@ int main(int argc, char** argv){
     // double delta_y = vx * sin(th) * dt;
     double delta_x = vx * cos(th);
     double delta_y = vx * sin(th);
-    double delta_th = vth * dt;
+    double delta_th = vth; // * dt;
 
     x += delta_x;
     y += delta_y;

@@ -4,4 +4,4 @@ global_costmap:
   static_map: true
   update_frequency: 1.0
   publish_frequency: 1.0
-  transform_tolerance: 1.0 # set higher value if timeout err report
+  transform_tolerance: 2.0 # set higher value if timeout err report
