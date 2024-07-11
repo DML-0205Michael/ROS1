@@ -34,6 +34,9 @@
 
     <!--- Run AMCL -->
     <node pkg="amcl" type="amcl" name="amcl">
+        <param name="initial_pose_y" value="0" /> 
+        <param name="initial_pose_x" value="0" /> 
+        <param name="initial_pose_a" value="0" /> 
         <param name="odom_frame_id" value="odom" /> 
         <param name="base_frame_id" value="base_link" /> 
         <param name="update_min_a" value="0.05" /> 

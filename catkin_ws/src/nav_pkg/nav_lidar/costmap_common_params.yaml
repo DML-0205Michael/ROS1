@@ -1,7 +1,7 @@
 robot_radius: 0.15
-inflation_radius: 0.6
-obstacle_range: 8.0 # add all obsticles within this range to cost map
-raytrace_range: 8.0 # all cells that are penetrated within this range are considered no obsticle
+inflation_radius: 0.7
+obstacle_range: 4.0 # add all obsticles within this range to cost map
+raytrace_range: 4.0 # all cells that are penetrated within this range are considered no obsticle
 observation_sources: base_lidar
 base_lidar: {
   data_type: LaserScan,

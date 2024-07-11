@@ -3,7 +3,7 @@ TebLocalPlannerROS:
   map_frame: map
 
   teb_autosize: true
-  dt_ref: 0.15
+  dt_ref: 0.2
   dt_hysteresis: 0.05
   global_plan_overwrite_orientation: true
   max_global_plan_lookahead_dist: 3.0
@@ -12,9 +12,10 @@ TebLocalPlannerROS:
 
 
   # motion
-  max_vel_x: 0.4
-  max_vel_x_backwards: 0.4
-  max_vel_theta: 7.0
+  max_vel_x: 0.25
+  max_vel_y: 0
+  max_vel_x_backwards: 0.25
+  max_vel_theta: 2.0
   acc_lim_x: 3
   acc_lim_theta: 10.0
 
@@ -46,7 +47,7 @@ TebLocalPlannerROS:
 
   # obstacle
   min_obstacle_dist: 0.4
-  inflation_dist: 0.6
+  inflation_dist: 0.8
   include_costmap_obstacles: true
   costmap_obstacles_behind_robot_dist: 0.15
   obstacle_poses_affected: 25
@@ -56,14 +57,14 @@ TebLocalPlannerROS:
   no_inner_iterations: 10
   no_outer_iterations: 10
   penalty_epsilon: 0.05
-  weight_max_vel_x: 1
+  weight_max_vel_x: 3
   weight_max_vel_theta: 5
   weight_acc_lim_x: 1
   weight_acc_lim_thet: 1
   weight_kinematics_nh: 1000
-  weight_kinematics_forward_drive: 1
-  weight_optimaltime: 100
-  weight_obstacle: 1000
+  weight_kinematics_forward_drive: 5
+  weight_optimaltime: 10
+  weight_obstacle: 100
   weight_viapoint: 10
 
   # multi path

@@ -12,7 +12,7 @@ void ardCallback(const msg_pkg::from_arduino_msg& msg){
   // if (enc1==0 && enc2 ==0){
   //   vth=0;
   // } else 
-  // vth=(msg.gz+15)/131/180*M_PI; // angular speed, rad/s
+  vth=(msg.gz+15)/131/180*M_PI; // angular speed, rad/s
   // ROS_INFO("Enc1: %d, Enc2: %d, gz: %.5f",enc1,enc2,vth);
 }
 
@@ -42,30 +42,37 @@ int main(int argc, char** argv){
   current_time = ros::Time::now();
   last_time = ros::Time::now();
 
-  ros::Rate r(100.0);
+  ros::Rate r(50.0);
   while(n.ok()){
 
     ros::spinOnce();               // check for incoming messages
     current_time = ros::Time::now();
+    // current_time = ros::Time(0);
 
     //compute odometry in a typical way given the velocities of the robot
     // double R_speed=enc1*deg_per_count/360*wheel_diameter*M_PI; // m/s=meters per 10ms
     // double L_speed=enc2*deg_per_count/360*wheel_diameter*M_PI; // m/s=meters per 10ms
-    double R_speed=enc1*meter_per_count_R; // meters per 10ms
-    double L_speed=enc2*meter_per_count_L;
-    vx=(L_speed+R_speed)/2; // meters per loop (10ms)
-    double vth=(R_speed-L_speed)/0.157; // rad per loop
+    double R_speed=enc1*meter_per_count_R*100; // meters per s
+    double L_speed=enc2*meter_per_count_L*100;
+    vx=(L_speed+R_speed)/2; // meters per s
+
+    if (enc1==0 && enc2 ==0){
+      vth=0;
+    } 
+    
+    // double vth=(R_speed-L_speed)/0.157; // rad per s
     // vx=(enc1+enc2)*deg_per_count/360*wheel_diameter*M_PI/0.01;
     ROS_INFO("vx: %.3f, vth: %.3f",vx,vth);
 
     // ROS_INFO("L_sp: %.3f, R_sp: %.3f, vx: %.3f",L_speed, R_speed, vx);
     double dt = (current_time - last_time).toSec();
     // ROS_INFO("dt: %.4f",dt*1000);
-    // double delta_x = vx * cos(th) * dt;
-    // double delta_y = vx * sin(th) * dt;
-    double delta_x = vx * cos(th);
-    double delta_y = vx * sin(th);
-    double delta_th = vth; // * dt;
+    double delta_x = vx * cos(th) * dt;
+    double delta_y = vx * sin(th) * dt;
+    double delta_th = vth * dt;
+    // double delta_x = vx * cos(th);
+    // double delta_y = vx * sin(th);
+    // double delta_th = vth;
 
     x += delta_x;
     y += delta_y;

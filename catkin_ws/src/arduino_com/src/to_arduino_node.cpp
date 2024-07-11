@@ -7,16 +7,16 @@
 ros::Publisher pub;
 
 void velocityCallback(const geometry_msgs::Twist& vel_msg){
-    const double R=0.088;
+    const double R=0.078;
     const double meter_per_count_L=0.000294310812850564; 
     const double meter_per_count_R=0.000294132201307244;
 
-	double vx=vel_msg.linear.x;
-	double vth=vel_msg.angular.z;
+	double vx=vel_msg.linear.x; // m/s
+	double vth=vel_msg.angular.z; // rad/s
     ROS_INFO("vx: %.3f, vth:%.3f deg/s",vx,vth*180/M_PI);
     
-    double v_R=vx-vth*R; // right wheel speed, m/s
-    double v_L=vx+vth*R; // left wheel speed, m/s
+    double v_R=vx-vth*R; // right wheel speed, m/s, m/1000ms
+    double v_L=vx+vth*R; // left wheel speed, m/s, m/1000ms
     
     int enc1_count_per_10ms=v_R/meter_per_count_R/100;
     int enc2_count_per_10ms=v_L/meter_per_count_L/100;
