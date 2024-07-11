@@ -350,8 +350,8 @@ void send_data(){
   //   last_time=t;
     SerialBT.print("*F"+String(enc_1_speed)+"*");
     SerialBT.print("*G"+String(enc_2_speed)+"*");
-    SerialBT.print("*H"+String(M1_speed)+"*");
-    SerialBT.print("*I"+String(M2_speed)+"*");
+    SerialBT.print("*H"+String(M1_speed_target)+"*");
+    SerialBT.print("*I"+String(M2_speed_target)+"*");
     // SerialBT.print("*H"+String(dt)+"*");
     // SerialBT.print("*I"+String(gz)+"*");
   // }
@@ -403,8 +403,9 @@ int motor_PI(int target, int actual){
   int err=target-actual;
   err_sum+=err;
   err_sum=constrain(err_sum,-20000,20000);
-  if (err<10) KI_out=err_sum*KI_speed;
-  else {KI_out=0; err_sum=0;}
+  // if (err<10) KI_out=err_sum*KI_speed;
+  // else {KI_out=0; err_sum=0;}
+  KI_out=err_sum*KI_speed;
   KP_out=err*KP_speed;
   return (KP_out+KI_out);
 }
