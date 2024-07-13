@@ -1,0 +1,8 @@
+<launch>
+    <node name="pbstream_to_ros_map_main" pkg="cartographer_ros" 
+        type="pbstream_to_ros_map_main" args="
+            -pbstream_filename $(arg pbstream_filename)
+            -map_filestem $(arg map_filestem)"
+        output="screen">
+    </node>
+</launch>

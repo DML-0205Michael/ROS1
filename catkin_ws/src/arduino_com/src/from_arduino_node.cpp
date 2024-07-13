@@ -7,8 +7,8 @@ int enc1, enc2;
 double vth = 0.0;
 
 void ardCallback(const msg_pkg::from_arduino_msg& msg){
-  enc1=msg.encoder1; // right speed, count per 10ms (Left if facing bot)
-  enc2=msg.encoder2; // speed, count per 10ms
+  enc1=msg.encoder1; // right speed, count per 20ms (Left if facing bot)
+  enc2=msg.encoder2; // speed, count per 20ms
   // if (enc1==0 && enc2 ==0){
   //   vth=0;
   // } else 
@@ -52,8 +52,8 @@ int main(int argc, char** argv){
     //compute odometry in a typical way given the velocities of the robot
     // double R_speed=enc1*deg_per_count/360*wheel_diameter*M_PI; // m/s=meters per 10ms
     // double L_speed=enc2*deg_per_count/360*wheel_diameter*M_PI; // m/s=meters per 10ms
-    double R_speed=enc1*meter_per_count_R*100; // meters per s
-    double L_speed=enc2*meter_per_count_L*100;
+    double R_speed=enc1*meter_per_count_R*50; // meters per s
+    double L_speed=enc2*meter_per_count_L*50;
     vx=(L_speed+R_speed)/2; // meters per s
 
     if (enc1==0 && enc2 ==0){
@@ -66,7 +66,7 @@ int main(int argc, char** argv){
 
     // ROS_INFO("L_sp: %.3f, R_sp: %.3f, vx: %.3f",L_speed, R_speed, vx);
     double dt = (current_time - last_time).toSec();
-    // ROS_INFO("dt: %.4f",dt*1000);
+    ROS_INFO("dt: %.4f",dt*1000); // ms
     double delta_x = vx * cos(th) * dt;
     double delta_y = vx * sin(th) * dt;
     double delta_th = vth * dt;

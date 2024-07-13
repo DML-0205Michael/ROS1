@@ -399,5 +399,24 @@ rosrun map_server map_server map_name :load map
 
 rosrun rqt_robot_steering rqt_robot_steering    :/cmd_vel manual input
 
-======================1003 SLAM======================
+======================1004 Navigation======================
 rosrun nav_pkg nav.launch
+
+About TEB Local Planner
+1. Better than DWA
+2. /cmd_vel only depends on current pose and the next pose (look_ahead). Function is named extractVelocity in teb_local_planner/src/optimal_planner.cpp, line 1097. 
+3. instant yaw speed (yaw speed in /cmd_vel) depends on angular acceleration. 
+4. Max yaw speed only limits the yaw speed. 
+5. so if angular acceleration is set to very high, the angular speed at this control loop is very high. If the system lagged very bad, new angular speed with lower value (now your robot has already turned) can't be updated, so your robot will keep running on previous high speed. It will spin as a result. 
+
+======================1005 Cartographer======================
+Ubuntu kept freezing: https://www.reddit.com/r/ROS/comments/o873vi/issues_installing_cartographer_to_ros_noetic_on/?rdt=54738
+Solution: 
+YES: catkin_make_isolated -j4 --install --use-ninja 
+NO : catkin_make_isolated --install --use-ninja 
+
+Save a map
+rosservice call /write_state /home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3.pbstream
+
+roslaunch slam_pkg pbstream2rosmap.launch pbstream_filename:=/home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3.pbstream map_filestem:=/home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3
+

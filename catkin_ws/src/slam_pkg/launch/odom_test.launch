@@ -9,5 +9,11 @@
 
     <node pkg="arduino_com" type="from_arduino_node" name="from_arduino_node"/>
 
-    
+    <node pkg="arduino_com" type="to_arduino_node" name="to_arduino_node"/>
+
+    <!-- start rviz -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find slam_pkg)/rviz/odom_test.rviz"/>
+
+    <node pkg="rqt_robot_steering" type="rqt_robot_steering" name="rqt_robot_steering"/>
+
 </launch>

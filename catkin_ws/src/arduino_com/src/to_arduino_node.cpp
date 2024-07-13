@@ -18,13 +18,17 @@ void velocityCallback(const geometry_msgs::Twist& vel_msg){
     double v_R=vx-vth*R; // right wheel speed, m/s, m/1000ms
     double v_L=vx+vth*R; // left wheel speed, m/s, m/1000ms
     
-    int enc1_count_per_10ms=v_R/meter_per_count_R/100;
-    int enc2_count_per_10ms=v_L/meter_per_count_L/100;
+    int enc1_count_per_20ms=v_R/meter_per_count_R/50;
+    int enc2_count_per_20ms=v_L/meter_per_count_L/50;
 
     msg_pkg::to_arduino_msg new_msg;
-    new_msg.M1_encoder_speed=enc2_count_per_10ms; // encoder count per 10ms
-    new_msg.M2_encoder_speed=enc1_count_per_10ms; // encoder count per 10ms
-    // ROS_INFO("Enc1: %d, Enc2: %.d",enc1_count_per_10ms,enc2_count_per_10ms);
+
+    new_msg.M1_speed=vx;
+    new_msg.M2_speed=vth;
+
+    new_msg.M1_encoder_speed=enc2_count_per_20ms; // encoder count per 20ms
+    new_msg.M2_encoder_speed=enc1_count_per_20ms; // encoder count per 20ms
+    // ROS_INFO("Enc1: %d, Enc2: %.d",enc1_count_per_20ms,enc2_count_per_20ms);
     pub.publish(new_msg);
 }
 

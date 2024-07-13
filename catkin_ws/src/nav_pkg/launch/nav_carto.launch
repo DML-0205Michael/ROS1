@@ -1,0 +1,49 @@
+<launch>
+    <!-- start ESP32 -> ROS -->
+    <node pkg="rosserial_python" type="serial_node.py" name="serial_node">
+        <param name="port" value="/dev/ttyUSB0"/>
+        <param name="baud" value="460800"/>
+    </node>
+
+    <arg name="node_start_delay" default="5.0" />
+
+    <node pkg="arduino_com" type="from_arduino_node" name="from_arduino_node"/>
+
+    <node pkg="arduino_com" type="to_arduino_node" name="to_arduino_node"/>
+
+    <!-- start LD19 LiDAR -->
+    <include file="$(find ldlidar_stl_ros)/launch/ld19.launch"/> 
+    
+    <!-- start navigation -->
+    <node pkg="move_base" type="move_base" name="move_base">
+        <rosparam file="$(find nav_pkg)/nav_lidar/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find nav_pkg)/nav_lidar/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find nav_pkg)/nav_lidar/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find nav_pkg)/nav_lidar/local_costmap_params.yaml" command="load" />
+        <param name="base_global_planner" value="global_planner/GlobalPlanner" /> 
+
+        <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" /> 
+        <rosparam file="$(find nav_pkg)/nav_lidar/teb_local_planner.yaml" command="load" />
+    </node>
+
+    <!-- Start Cartographer -->
+    <param name="use_sim_time" value="false"/>
+
+    <node name="cartographer_node" 
+        pkg="cartographer_ros"
+        type="cartographer_node" 
+        args="
+          -configuration_directory $(find cartographer_ros)/configuration_files
+          -configuration_basename my_pure_localization.lua
+          -load_state_filename /home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3.pbstream"
+      output="screen">
+    </node>
+
+    <!-- <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
+      type="cartographer_occupancy_grid_node" 
+      args="-resolution 0.05
+            -pure_localization 1"/> -->
+
+    <!-- start rviz -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find nav_pkg)/rviz/nav_carto.rviz"/>
+</launch>
