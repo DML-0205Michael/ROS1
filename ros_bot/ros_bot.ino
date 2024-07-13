@@ -13,10 +13,13 @@ ros::Publisher ard_pub("ard_to_ros_pub", &pub_msg);
 
 // Subscriber
 int M1_speed_target, M2_speed_target; // encoder needed count in 10ms
+float vx, vth;
 
 void messageCb( const msg_pkg::to_arduino_msg& ros_msg){
   M1_speed_target=ros_msg.M1_encoder_speed;
   M2_speed_target=ros_msg.M2_encoder_speed;
+  vx=ros_msg.M1_speed;
+  vth=ros_msg.M2_speed;
 }
 ros::Subscriber<msg_pkg::to_arduino_msg> sub("ros_to_ard_pub", &messageCb );
 // ======================== ROS ========================//
@@ -80,8 +83,8 @@ int dt=0;
 //=============================================Bluetooth=============================================//
 //=============================================Control=============================================//
 float KP_yaw=0.1, KD_yaw=0;
-float KP_speed=50, KI_speed=2; // enc speed about 70, 2m/s, pwm should be around 4000
-int err_sum=0;
+float KP_speed=60, KI_speed=10; // enc speed about 80 ct/20ms, 1.1m/s, pwm should be around 4000
+int err_sum_1=0,err_sum_2=0;
 int target_yaw_speed=0,yaw_PD_output;
 int M1_PI_ouput, M2_PI_ouput;
 //=============================================Control=============================================//
@@ -179,8 +182,8 @@ void read_mpu6050_yaw_loop(){
 void encoder_data_loop(){ 
   if (count_2==0) count_1=0;
   
-  enc_1_speed=constrain(count_1,-37,37);
-  enc_2_speed=constrain(count_2,-37,37);
+  enc_1_speed=constrain(count_1,-90,90);
+  enc_2_speed=constrain(count_2,-90,90);
   // if (count_1!=0) digitalWrite(2,HIGH-digitalRead(2));
   // enc_1_dist+=count_1;
   // enc_2_dist+=count_2;
@@ -373,21 +376,31 @@ void control_loop(){
       M1_speed_no_fric=BT_input_pitch-yaw_PD_output;
       M2_speed_no_fric=BT_input_pitch+yaw_PD_output;
     }   
+    if (M1_speed_no_fric>0) M1_speed=M1_speed_no_fric+M1_fric;
+    else if (M1_speed_no_fric<0) M1_speed=M1_speed_no_fric-M1_fric;
+    else M1_speed=0;
+
+    if (M2_speed_no_fric>0) M2_speed=M2_speed_no_fric+M2_fric;
+    else if (M2_speed_no_fric<0) M2_speed=M2_speed_no_fric-M2_fric;
+    else M2_speed=0;
+
   } else if (control_switch>115){ // ros control
-    if (M1_speed_target==0) M1_speed_no_fric=0;
-    else M1_speed_no_fric=motor_PI(M1_speed_target,enc_1_speed);
+    // int target_yaw_speed_ros=vth*180/M_PI*131;
+    // yaw_PD(target_yaw_speed_ros,int(gz)-136);
 
-    if (M2_speed_target==0) M2_speed_no_fric=0;
-    else M2_speed_no_fric=motor_PI(M2_speed_target,enc_2_speed);
+    M1_speed_no_fric=M1_speed_PI(M1_speed_target,enc_1_speed); //-yaw_PD_output;
+
+    M2_speed_no_fric=M2_speed_PI(M2_speed_target,enc_2_speed); //+yaw_PD_output;
+
+    if (M1_speed_target==0) M1_speed=0;
+    else M1_speed=M1_speed_no_fric;
+
+    if (M2_speed_target==0) M2_speed=0;
+    else M2_speed=M2_speed_no_fric;
   }
+  
 
-  if (M1_speed_no_fric>0) M1_speed=M1_speed_no_fric+M1_fric;
-  else if (M1_speed_no_fric<0) M1_speed=M1_speed_no_fric-M1_fric;
-  else M1_speed=0;
-
-  if (M2_speed_no_fric>0) M2_speed=M2_speed_no_fric+M2_fric;
-  else if (M2_speed_no_fric<0) M2_speed=M2_speed_no_fric-M2_fric;
-  else M2_speed=0;
+ 
 
   M1_speed=constrain(M1_speed, -4096,4096);
   M2_speed=constrain(M2_speed, -4096,4096);
@@ -398,21 +411,35 @@ void yaw_PD(int target, int ang_speed){
   yaw_PD_output=int(KP_yaw*(ang_speed-target)+KD_yaw*ang_speed);
 }
 
-int motor_PI(int target, int actual){
+int M1_speed_PI(int target, int actual){
   int KI_out, KP_out;
-  int err=target-actual;
-  err_sum+=err;
-  err_sum=constrain(err_sum,-20000,20000);
-  // if (err<10) KI_out=err_sum*KI_speed;
-  // else {KI_out=0; err_sum=0;}
-  KI_out=err_sum*KI_speed;
+  int err=target-actual; 
+  if (target==0) err_sum_1=0;
+  else {
+    err_sum_1+=err;
+    err_sum_1=constrain(err_sum_1,-20000,20000);
+  }
+  KI_out=err_sum_1*KI_speed;
+  KP_out=err*KP_speed;
+  return (KP_out+KI_out);
+}
+
+int M2_speed_PI(int target, int actual){
+  int KI_out, KP_out;
+  int err=target-actual; 
+  if (target==0) err_sum_2=0;
+  else {
+    err_sum_2+=err;
+    err_sum_2=constrain(err_sum_2,-20000,20000);
+  }
+  KI_out=err_sum_2*KI_speed;
   KP_out=err*KP_speed;
   return (KP_out+KI_out);
 }
 //=============================================Control=============================================//
 //============================================= TIME =============================================//
 unsigned long loop_start_time=0;
-const int loop_time=10000; // micro seconds
+const int loop_time=20000; // micro seconds
 
 void time_holder_loop(){
   if(micros() - loop_start_time > (loop_time+50)) {
