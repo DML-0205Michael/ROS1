@@ -412,11 +412,40 @@ About TEB Local Planner
 ======================1005 Cartographer======================
 Ubuntu kept freezing: https://www.reddit.com/r/ROS/comments/o873vi/issues_installing_cartographer_to_ros_noetic_on/?rdt=54738
 Solution: 
-YES: catkin_make_isolated -j4 --install --use-ninja 
+NO : catkin_make_isolated -j4 --install --use-ninja 
 NO : catkin_make_isolated --install --use-ninja 
+Yes: catkin_make_isolated -j1 --install --use-ninja 
 
 Save a map
 rosservice call /write_state /home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3.pbstream
 
 roslaunch slam_pkg pbstream2rosmap.launch pbstream_filename:=/home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3.pbstream map_filestem:=/home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3
 
+Pure localization: http://www.guyuehome.com/33683
+======================9999 References======================
+https://wiki.ros.org/gmapping
+https://wiki.ros.org/navigation/Tutorials/RobotSetup/Odom odometry sample code
+https://wiki.ros.org/rosserial_python
+https://answers.ros.org/question/233353/set-delay-between-starting-nodes-within-launch-file/ delay between launch nodes
+https://answers.ros.org/question/210875/arduino-rosserial-unable-to-sync-with-device/
+
+Q: Fixed Frame [map] does not exist
+A: https://blog.csdn.net/libenfan/article/details/121772671 
+Conclusion: Actually not going to fix the key problem. 虽然有map frame但是没用
+
+Q: compile freeze on raspberry pi4B, fatal error: Killed signal terminated program cc1plus
+https://github.com/mlpack/mlpack/issues/2775 
+Conclusion: use catkin_make_install -j1 --install --use-ninja
+
+Q: actual ROS bot cartographer config
+https://blog.yanjingang.com/?p=6346 实体车配置
+Conclusion: Useful. 有用
+
+Q: Cartographer no map received. There's /map topic, but no data
+https://fishros.org.cn/forum/topic/2297/cartographer%E5%BB%BA%E5%9B%BE%E5%8F%AF%E8%A7%86%E5%8C%96%E6%98%BE%E7%A4%BAno-map-receiced/2 
+Conclusion: Not affected. Can't fix the key problem. 不能解决有/map话题但是话题里没有消息的根本问题，不用也行.
+
+https://github.com/fishros/install FishROS, 鱼香ROS
+
+FishROS need manual compile. 鱼香肉丝一键安装后需要手动编译，先cd cartographer_ws，然后catkin_make_install -j1 --install --use-ninja
+https://www.bilibili.com/video/BV1Hw411u76s/?spm_id_from=333.788.top_right_bar_window_history.content.click&vd_source=480f94c41b9c85e4ee6ec94fb420145b

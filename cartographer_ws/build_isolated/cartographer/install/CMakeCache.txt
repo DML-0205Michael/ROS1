@@ -570,7 +570,7 @@ FIND_PACKAGE_MESSAGE_DETAILS_Lua:INTERNAL=[/usr/lib/aarch64-linux-gnu/liblua5.2.
 //Details about finding PkgConfig
 FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/bin/pkg-config][v0.29.1()]
 //Details about finding Protobuf
-FIND_PACKAGE_MESSAGE_DETAILS_Protobuf:INTERNAL=[/usr/local/lib/libprotobuf.a;-lpthread][/usr/local/include][v3.4.0(3.0.0)]
+FIND_PACKAGE_MESSAGE_DETAILS_Protobuf:INTERNAL=[/usr/local/lib/libprotobuf.a;-lpthread][/usr/local/include][v3.6.1(3.0.0)]
 //Details about finding PythonInterp
 FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/bin/python][v3.8.10()]
 //Details about finding Sphinx

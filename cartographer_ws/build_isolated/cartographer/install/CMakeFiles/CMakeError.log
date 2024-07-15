@@ -1,11 +1,11 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
 Change Dir: /home/ubuntu/cartographer_ws/build_isolated/cartographer/install/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/ninja cmTC_7395d && [1/2] Building C object CMakeFiles/cmTC_7395d.dir/src.c.o
-[2/2] Linking C executable cmTC_7395d
-FAILED: cmTC_7395d 
-: && /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -rdynamic CMakeFiles/cmTC_7395d.dir/src.c.o  -o cmTC_7395d   && :
-/usr/bin/ld: CMakeFiles/cmTC_7395d.dir/src.c.o: in function `main':
+Run Build Command(s):/usr/bin/ninja cmTC_5b41b && [1/2] Building C object CMakeFiles/cmTC_5b41b.dir/src.c.o
+[2/2] Linking C executable cmTC_5b41b
+FAILED: cmTC_5b41b 
+: && /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -rdynamic CMakeFiles/cmTC_5b41b.dir/src.c.o  -o cmTC_5b41b   && :
+/usr/bin/ld: CMakeFiles/cmTC_5b41b.dir/src.c.o: in function `main':
 src.c:(.text+0x48): undefined reference to `pthread_create'
 /usr/bin/ld: src.c:(.text+0x50): undefined reference to `pthread_detach'
 /usr/bin/ld: src.c:(.text+0x5c): undefined reference to `pthread_join'
@@ -36,10 +36,10 @@ int main(void)
 Determining if the function pthread_create exists in the pthreads failed with the following output:
 Change Dir: /home/ubuntu/cartographer_ws/build_isolated/cartographer/install/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/ninja cmTC_5618b && [1/2] Building C object CMakeFiles/cmTC_5618b.dir/CheckFunctionExists.c.o
-[2/2] Linking C executable cmTC_5618b
-FAILED: cmTC_5618b 
-: && /usr/bin/cc -DCHECK_FUNCTION_EXISTS=pthread_create  -rdynamic CMakeFiles/cmTC_5618b.dir/CheckFunctionExists.c.o  -o cmTC_5618b  -lpthreads && :
+Run Build Command(s):/usr/bin/ninja cmTC_f9af7 && [1/2] Building C object CMakeFiles/cmTC_f9af7.dir/CheckFunctionExists.c.o
+[2/2] Linking C executable cmTC_f9af7
+FAILED: cmTC_f9af7 
+: && /usr/bin/cc -DCHECK_FUNCTION_EXISTS=pthread_create  -rdynamic CMakeFiles/cmTC_f9af7.dir/CheckFunctionExists.c.o  -o cmTC_f9af7  -lpthreads && :
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
 ninja: build stopped: subcommand failed.

@@ -1,11 +1,11 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
 Change Dir: /home/ubuntu/cartographer_ws/build_isolated/cartographer_ros/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/ninja cmTC_e8502 && [1/2] Building C object CMakeFiles/cmTC_e8502.dir/src.c.o
-[2/2] Linking C executable cmTC_e8502
-FAILED: cmTC_e8502 
-: && /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -rdynamic CMakeFiles/cmTC_e8502.dir/src.c.o  -o cmTC_e8502   && :
-/usr/bin/ld: CMakeFiles/cmTC_e8502.dir/src.c.o: in function `main':
+Run Build Command(s):/usr/bin/ninja cmTC_73640 && [1/2] Building C object CMakeFiles/cmTC_73640.dir/src.c.o
+[2/2] Linking C executable cmTC_73640
+FAILED: cmTC_73640 
+: && /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -rdynamic CMakeFiles/cmTC_73640.dir/src.c.o  -o cmTC_73640   && :
+/usr/bin/ld: CMakeFiles/cmTC_73640.dir/src.c.o: in function `main':
 src.c:(.text+0x48): undefined reference to `pthread_create'
 /usr/bin/ld: src.c:(.text+0x50): undefined reference to `pthread_detach'
 /usr/bin/ld: src.c:(.text+0x5c): undefined reference to `pthread_join'
@@ -36,10 +36,10 @@ int main(void)
 Determining if the function pthread_create exists in the pthreads failed with the following output:
 Change Dir: /home/ubuntu/cartographer_ws/build_isolated/cartographer_ros/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/ninja cmTC_46d36 && [1/2] Building C object CMakeFiles/cmTC_46d36.dir/CheckFunctionExists.c.o
-[2/2] Linking C executable cmTC_46d36
-FAILED: cmTC_46d36 
-: && /usr/bin/cc -DCHECK_FUNCTION_EXISTS=pthread_create  -rdynamic CMakeFiles/cmTC_46d36.dir/CheckFunctionExists.c.o  -o cmTC_46d36  -lpthreads && :
+Run Build Command(s):/usr/bin/ninja cmTC_b02a7 && [1/2] Building C object CMakeFiles/cmTC_b02a7.dir/CheckFunctionExists.c.o
+[2/2] Linking C executable cmTC_b02a7
+FAILED: cmTC_b02a7 
+: && /usr/bin/cc -DCHECK_FUNCTION_EXISTS=pthread_create  -rdynamic CMakeFiles/cmTC_b02a7.dir/CheckFunctionExists.c.o  -o cmTC_b02a7  -lpthreads && :
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
 ninja: build stopped: subcommand failed.
