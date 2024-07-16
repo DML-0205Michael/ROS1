@@ -417,11 +417,14 @@ NO : catkin_make_isolated --install --use-ninja
 Yes: catkin_make_isolated -j1 --install --use-ninja 
 
 Save a map
-rosservice call /write_state /home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3.pbstream
+rosservice call /finish_trajectory 0
+rosservice call /write_state /home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3.pbstream true
 
 roslaunch slam_pkg pbstream2rosmap.launch pbstream_filename:=/home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3.pbstream map_filestem:=/home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3
 
-Pure localization: http://www.guyuehome.com/33683
+Pure localization: 
+http://www.guyuehome.com/33683
+http://www.guyuehome.com/35854
 ======================9999 References======================
 https://wiki.ros.org/gmapping
 https://wiki.ros.org/navigation/Tutorials/RobotSetup/Odom odometry sample code

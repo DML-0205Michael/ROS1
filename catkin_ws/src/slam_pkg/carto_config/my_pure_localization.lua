@@ -12,11 +12,13 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-include "backpack_2d.lua"
+-- include "my_backpack_2d.lua"
+include "my_carto_2d_SLAM.lua"
 
 TRAJECTORY_BUILDER.pure_localization_trimmer = {
   max_submaps_to_keep = 3,
 }
-POSE_GRAPH.optimize_every_n_nodes = 20
+POSE_GRAPH.optimize_every_n_nodes = 5
+-- TRAJECTORY_BUILDER.pure_localization = true
 
 return options

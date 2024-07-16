@@ -26,16 +26,23 @@
         <rosparam file="$(find nav_pkg)/nav_lidar/teb_local_planner.yaml" command="load" />
     </node>
 
+    <!-- Run map server -->
+    <node pkg="map_server" type="map_server" name="map_server" args="$(find slam_pkg)/maps/NISW4.yaml"/>
+
+
     <!-- Start Cartographer -->
-    <param name="use_sim_time" value="false"/>
+    <arg name="simulation" default="false"/>
+    <arg name="version" default="$(env ROS_DISTRO)" />
+    <param name="/use_sim_time" value="$(arg simulation)" />
 
     <node name="cartographer_node" 
         pkg="cartographer_ros"
         type="cartographer_node" 
         args="
-          -configuration_directory $(find cartographer_ros)/configuration_files
+          -configuration_directory /home/ubuntu/catkin_ws/src/slam_pkg/carto_config
           -configuration_basename my_pure_localization.lua
           -load_state_filename /home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3.pbstream"
+
       output="screen">
     </node>
 
@@ -43,7 +50,7 @@
     on line 171 in occupancy_grid_node_main.cc -->
     <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
       type="cartographer_occupancy_grid_node" 
-      args="-resolution 0.05
+      args="-resolution 0.03
             -pure_localization 1"/>
 
     <!-- start rviz -->
