@@ -12,12 +12,15 @@ msg_pkg::from_arduino_msg pub_msg;
 ros::Publisher ard_pub("ard_to_ros_pub", &pub_msg);
 
 // Subscriber
-int M1_speed_target, M2_speed_target; // encoder needed count in 10ms
+int M1_speed_target, M2_speed_target; // encoder needed count in 20ms
+int M1_speed_target_pre, M2_speed_target_pre;
 float vx, vth;
 
 void messageCb( const msg_pkg::to_arduino_msg& ros_msg){
-  M1_speed_target=ros_msg.M1_encoder_speed;
-  M2_speed_target=ros_msg.M2_encoder_speed;
+  M1_speed_target_pre=M1_speed_target;
+  M2_speed_target_pre=M2_speed_target;
+  M1_speed_target=ros_msg.M1_encoder_speed/2+M1_speed_target_pre/2;
+  M2_speed_target=ros_msg.M2_encoder_speed/2+M2_speed_target_pre/2;
   vx=ros_msg.M1_speed;
   vth=ros_msg.M2_speed;
 }
