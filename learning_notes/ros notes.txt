@@ -409,6 +409,10 @@ About TEB Local Planner
 4. Max yaw speed only limits the yaw speed. 
 5. so if angular acceleration is set to very high, the angular speed at this control loop is very high. If the system lagged very bad, new angular speed with lower value (now your robot has already turned) can't be updated, so your robot will keep running on previous high speed. It will spin as a result. 
 
+TEB Local planner costmap converter plugin
+https://wiki.ros.org/teb_local_planner/Tutorials/Costmap%20conversion
+https://www.guyuehome.com/34465
+
 ======================1005 Cartographer======================
 Ubuntu kept freezing: https://www.reddit.com/r/ROS/comments/o873vi/issues_installing_cartographer_to_ros_noetic_on/?rdt=54738
 Solution: 
@@ -425,6 +429,8 @@ roslaunch slam_pkg pbstream2rosmap.launch pbstream_filename:=/home/ubuntu/catkin
 Pure localization: 
 http://www.guyuehome.com/33683
 http://www.guyuehome.com/35854
+https://github.com/xiangli0608/cartographer_detailed_comments_ws/blob/master/src/cartographer_ros/cartographer_ros/launch/lx_rs16_2d_outdoor_localization.launch
+
 ======================9999 References======================
 https://wiki.ros.org/gmapping
 https://wiki.ros.org/navigation/Tutorials/RobotSetup/Odom odometry sample code

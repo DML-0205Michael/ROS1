@@ -24,16 +24,20 @@
 
         <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" /> 
         <rosparam file="$(find nav_pkg)/nav_lidar/teb_local_planner.yaml" command="load" />
+        <rosparam file="$(find nav_pkg)/nav_lidar/costmap_converter_params.yaml" command="load" />
     </node>
 
     <!-- Run map server -->
-    <node pkg="map_server" type="map_server" name="map_server" args="$(find slam_pkg)/maps/NISW4.yaml"/>
-
+    <node pkg="map_server" type="map_server" name="map_server" 
+          args="/home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW4.yaml"/>
 
     <!-- Start Cartographer -->
-    <arg name="simulation" default="false"/>
-    <arg name="version" default="$(env ROS_DISTRO)" />
-    <param name="/use_sim_time" value="$(arg simulation)" />
+    <param name="/use_sim_time" value="false" />
+
+    <!-- <node name="robot_state_publisher" 
+        pkg="robot_state_publisher"
+        type="robot_state_publisher">
+    </node> -->
 
     <node name="cartographer_node" 
         pkg="cartographer_ros"
@@ -41,17 +45,25 @@
         args="
           -configuration_directory /home/ubuntu/catkin_ws/src/slam_pkg/carto_config
           -configuration_basename my_pure_localization.lua
+          -start_trajectory_with_default_topics = false
           -load_state_filename /home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3.pbstream"
 
       output="screen">
     </node>
 
-    <!-- Comment out "occupancy_grid_publisher_.publish(*msg_ptr);"
-    on line 171 in occupancy_grid_node_main.cc -->
-    <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
-      type="cartographer_occupancy_grid_node" 
-      args="-resolution 0.03
-            -pure_localization 1"/>
+    <!-- <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
+      type="cartographer_occupancy_grid_node"
+      args="-resolution 0.03"/> -->
+
+    <!-- <node name="pbstream_map_publisher" pkg="cartographer_ros"
+      type="pbstream_map_publisher"
+      args="
+          -configuration_directory /home/ubuntu/catkin_ws/src/slam_pkg/carto_config
+          -configuration_basename my_pure_localization.lua
+          -pbstream_filename /home/ubuntu/catkin_ws/src/slam_pkg/maps/NISW3.pbstream
+          "
+          /> -->
+
 
     <!-- start rviz -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find nav_pkg)/rviz/nav_carto.rviz"/>

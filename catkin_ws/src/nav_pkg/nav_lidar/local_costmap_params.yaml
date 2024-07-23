@@ -3,8 +3,8 @@ local_costmap:
   robot_base_frame: base_link
   static_map: false # use temp map scanned by lidar
   rolling_window: true # local costmap follow robot?
-  width: 4
-  height: 4
-  update_frequency: 5.0
-  publish_frequency: 5
+  width: 3
+  height: 3
+  update_frequency: 10.0 # wsa 5 when using amcl
+  publish_frequency: 10 # wsa 5 when using amcl
   transform_tolerance: 2.0

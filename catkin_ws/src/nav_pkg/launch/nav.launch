@@ -27,6 +27,7 @@
 
         <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" /> 
         <rosparam file="$(find nav_pkg)/nav_lidar/teb_local_planner.yaml" command="load" />
+        <rosparam file="$(find nav_pkg)/nav_lidar/costmap_converter_params.yaml" command="load" />
     </node>
 
     <!-- Run map server -->
